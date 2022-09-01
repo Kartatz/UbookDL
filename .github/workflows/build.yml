@@ -30,17 +30,9 @@ jobs:
         )
         
         for host in "${hosts[@]}"; do
-          cmake -DCMAKE_TOOLCHAIN_FILE=cross/${host} -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
+          cmake -DCMAKE_TOOLCHAIN_FILE=../cross/${host}.cmake -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
           cmake --build ./ -j 50
           cmake --install ./
           
           rm --force --recursive ./*
         done
-        
-        rm --force --recursive ./*
-        
-        cmake -DCMAKE_TOOLCHAIN_FILE=cross/arm-linux-gnueabi.cmake -DCMAKE_INSTALL_PREFIX=arm-linux-gnueabi -DCMAKE_BUILD_TYPE=MinSizeRel ../
-        cmake --build ./ -j 50
-        cmake --install ./
-        
-        rm --force --recursive ./*
