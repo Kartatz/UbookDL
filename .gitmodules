@@ -1,0 +1,12 @@
+[submodule "submodules/json-c"]
+	path = submodules/json-c
+	url = https://github.com/json-c/json-c
+[submodule "submodules/pcre2"]
+	path = submodules/pcre2
+	url = https://github.com/PCRE2Project/pcre2
+[submodule "submodules/curl"]
+	path = submodules/curl
+	url = https://github.com/curl/curl
+[submodule "submodules/bearssl"]
+	path = submodules/bearssl
+	url = https://www.bearssl.org/git/BearSSL

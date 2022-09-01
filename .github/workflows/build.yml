@@ -1,0 +1,46 @@
+name: Java Ci
+
+on:
+  push:
+    branches:
+        - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+      with:
+        submodules: true
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install --assume-yes gcc-arm-linux-gnueabi gcc-aarch64-linux-gnu gcc-i686-linux-gnu mingw-w64
+    - name: Build with CMake
+      run: |
+        mkdir build && cd build
+        
+        declare -ra hosts=(
+            aarch64-linux-gnu
+            arm-linux-gnueabi
+            armv7a-linux-androideabi
+            i686-linux-gnu
+            i686-w64-mingw32
+            mingw-w64-x86_64
+        )
+        
+        for host in "${hosts[@]}"; do
+          cmake -DCMAKE_TOOLCHAIN_FILE=cross/${host} -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
+          cmake --build ./ -j 50
+          cmake --install ./
+          
+          rm --force --recursive ./*
+        done
+        
+        rm --force --recursive ./*
+        
+        cmake -DCMAKE_TOOLCHAIN_FILE=cross/arm-linux-gnueabi.cmake -DCMAKE_INSTALL_PREFIX=arm-linux-gnueabi -DCMAKE_BUILD_TYPE=MinSizeRel ../
+        cmake --build ./ -j 50
+        cmake --install ./
+        
+        rm --force --recursive ./*
