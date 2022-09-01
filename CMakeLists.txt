@@ -11,6 +11,7 @@ project(
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# curl
 set(PICKY_COMPILER OFF)
 set(BUILD_CURL_EXE OFF)
 set(HTTP_ONLY ON)
@@ -30,7 +31,9 @@ set(CURL_USE_LIBSSH2 OFF)
 set(BEARSSL_INCLUDE_DIRS "none")
 set(BEARSSL_LIBRARY "none")
 
+# json-c
 set(BUILD_STATIC_LIBS OFF)
+set(DISABLE_WERROR ON)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
 	add_compile_options(-flto)
