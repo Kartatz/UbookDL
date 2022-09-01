@@ -27,13 +27,13 @@ set(CURL_DISABLE_NETRC ON)
 set(USE_LIBIDN2 OFF)
 set(ENABLE_UNIX_SOCKETS OFF)
 set(CURL_USE_LIBSSH2 OFF)
-set(BEARSSL_INCLUDE_DIRS submodules/bearssl/inc)
+set(BEARSSL_INCLUDE_DIRS "none")
 set(BEARSSL_LIBRARY "none")
 
 set(BUILD_STATIC_LIBS OFF)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-	add_compile_options(-flto=full)
+	add_compile_options(-flto)
 	add_link_options(-s)
 endif()
 
