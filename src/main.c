@@ -89,7 +89,7 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		fgets(access_token, sizeof(access_token), file);
+		(void) fgets(access_token, sizeof(access_token), file);
 		
 		fclose(file);
 	} else {

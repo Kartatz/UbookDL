@@ -30,8 +30,6 @@ set(ENABLE_UNIX_SOCKETS OFF)
 set(CURL_USE_LIBSSH2 OFF)
 set(CURL_CA_BUNDLE "none")
 set(CURL_CA_PATH "none")
-set(BEARSSL_INCLUDE_DIRS "none")
-set(BEARSSL_LIBRARY "bearssl")
 set(CURL_WERROR ON)
 
 # json-c
@@ -56,7 +54,7 @@ include_directories(
 add_subdirectory(submodules/json-c EXCLUDE_FROM_ALL)
 add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
 
-set(CURL_LIBS "" CACHE INTERNAL "" FORCE)
+set(CURL_LIBS "" PARENT_SCOPE)
 
 add_library(
 	bearssl
@@ -402,4 +400,3 @@ install(TARGETS bearssl
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/bearssl
 )
-
