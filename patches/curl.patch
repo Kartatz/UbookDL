@@ -1,0 +1,14 @@
+--- a/submodules/curl/CMakeLists.txt
++++ b/submodules/curl/CMakeLists.txt
+@@ -454,11 +454,8 @@ if(CURL_USE_MBEDTLS)
+ endif()
+ 
+ if(CURL_USE_BEARSSL)
+-  find_package(BearSSL REQUIRED)
+   set(SSL_ENABLED ON)
+   set(USE_BEARSSL ON)
+-  list(APPEND CURL_LIBS ${BEARSSL_LIBRARY})
+-  include_directories(${BEARSSL_INCLUDE_DIRS})
+ endif()
+ 
+ if(CURL_USE_WOLFSSL)
