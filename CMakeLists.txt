@@ -51,11 +51,6 @@ include_directories(
 	submodules/bearssl/inc
 )
 
-add_subdirectory(submodules/json-c EXCLUDE_FROM_ALL)
-add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
-
-set(CURL_LIBS "" PARENT_SCOPE)
-
 add_library(
 	bearssl
 	SHARED
@@ -355,6 +350,9 @@ add_library(
 	submodules/bearssl/src/x509/x509_minimal_full.c
 )
 
+add_subdirectory(submodules/json-c EXCLUDE_FROM_ALL)
+add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
+
 add_executable(
 	ubookdl
 	src/callbacks.c
@@ -364,17 +362,6 @@ add_executable(
 	src/query.c
 	src/types.c
 )
-
-#[[
-foreach(target ubookdl bearssl libcurl json-c)
-	add_custom_command(
-		TARGET "${target}" POST_BUILD
-		DEPENDS "${target}"
-		COMMAND $<$<CONFIG:debug>:${CMAKE_STRIP}>
-		ARGS --strip-all $<TARGET_FILE:${target}>
-	)
-endforeach()
-]]
 
 target_link_libraries(
 	ubookdl
