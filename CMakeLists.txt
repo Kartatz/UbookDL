@@ -31,9 +31,8 @@ set(CURL_USE_LIBSSH2 OFF)
 set(CURL_CA_BUNDLE "none")
 set(CURL_CA_PATH "none")
 set(BEARSSL_INCLUDE_DIRS "none")
-set(BEARSSL_LIBRARY "none")
-
-set(CURL_LIBS "")
+set(BEARSSL_LIBRARY "bearssl")
+set(CURL_WERROR ON)
 
 # json-c
 set(BUILD_STATIC_LIBS OFF)
@@ -56,6 +55,8 @@ include_directories(
 
 add_subdirectory(submodules/json-c EXCLUDE_FROM_ALL)
 add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
+
+set(CURL_LIBS "" CACHE INTERNAL "" FORCE)
 
 add_library(
 	bearssl
