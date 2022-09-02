@@ -30,8 +30,10 @@ set(ENABLE_UNIX_SOCKETS OFF)
 set(CURL_USE_LIBSSH2 OFF)
 set(CURL_CA_BUNDLE "none")
 set(CURL_CA_PATH "none")
-set(BEARSSL_INCLUDE_DIRS "bearssl")
-set(BEARSSL_LIBRARY "bearssl")
+set(BEARSSL_INCLUDE_DIRS "none")
+set(BEARSSL_LIBRARY "none")
+
+set(CURL_LIBS "")
 
 # json-c
 set(BUILD_STATIC_LIBS OFF)
