@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "query.h"
 #include "errors.h"

@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <curl/curl.h>
-#include <json-c/json.h>
-#include <json-c/json_util.h>
+#include <json.h>
+#include <json_util.h>
 
 #include "query.h"
 #include "errors.h"
@@ -110,7 +111,7 @@ int main(const int argc, const char* argv[]) {
 			while (1) {
 				printf("> Senha: ");
 				
-				if (fgets(password, sizeof(), stdin) != NULL && *password != '\n') {
+				if (fgets(password, sizeof(password), stdin) != NULL && *password != '\n') {
 					break;
 				}
 				
