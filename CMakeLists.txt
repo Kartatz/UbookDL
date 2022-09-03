@@ -47,7 +47,7 @@ include_directories(
 
 add_library(
 	bearssl
-	SHARED
+	STATIC
 	submodules/bearssl/src/settings.c
 	submodules/bearssl/src/aead/ccm.c
 	submodules/bearssl/src/aead/eax.c
@@ -343,6 +343,9 @@ add_library(
 	submodules/bearssl/src/x509/x509_minimal.c
 	submodules/bearssl/src/x509/x509_minimal_full.c
 )
+
+set(BEARSSL_INCLUDE_DIRS submodules/bearssl/inc)
+set(BEARSSL_LIBRARY $<TARGET_FILE:bearssl>)
 
 add_subdirectory(submodules/cJSON EXCLUDE_FROM_ALL)
 add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)

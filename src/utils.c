@@ -81,7 +81,7 @@ int expand_filename(const char* filename, char** fullpath) {
 		*fullpath = malloc(code + 1);
 		
 		if (*fullpath == NULL) {
-			return 0
+			return 0;
 		}
 		
 		strcpy(*fullpath, path);
