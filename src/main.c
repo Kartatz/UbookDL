@@ -8,8 +8,7 @@
 #include "query.h"
 #include "errors.h"
 #include "ssl.h"
-#include "io.h"
-#include "os.h"
+#include "utils.h"
 #include "types.h"
 #include "callbacks.h"
 

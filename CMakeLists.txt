@@ -32,11 +32,6 @@ set(CURL_CA_BUNDLE "none")
 set(CURL_CA_PATH "none")
 set(CURL_WERROR OFF)
 
-# json-c
-set(ENABLE_CUSTOM_COMPILER_FLAGS OFF)
-set(ENABLE_CJSON_TEST OFF)
-set(ENABLE_SANITIZERS OFF)
-
 if (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
 	add_compile_options(-flto)
 	add_link_options(-s)
@@ -358,9 +353,8 @@ add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
 add_executable(
 	ubookdl
 	src/callbacks.c
-	src/io.c
 	src/main.c
-	src/os.c
+	src/utils.c
 	src/query.c
 	src/types.c
 )
