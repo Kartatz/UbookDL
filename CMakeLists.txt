@@ -47,7 +47,7 @@ include_directories(
 
 add_library(
 	bearssl
-	STATIC
+	SHARED
 	submodules/bearssl/src/settings.c
 	submodules/bearssl/src/aead/ccm.c
 	submodules/bearssl/src/aead/eax.c
@@ -349,6 +349,8 @@ set(BEARSSL_LIBRARY $<TARGET_FILE:bearssl>)
 
 add_subdirectory(submodules/cJSON EXCLUDE_FROM_ALL)
 add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
+
+set_target_properties(libcurl PROPERTIES IMPORTED_LOCATION $<TARGET_FILE:bearssl>)
 
 add_executable(
 	ubookdl
