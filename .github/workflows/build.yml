@@ -30,7 +30,7 @@ jobs:
         )
         
         for host in "${hosts[@]}"; do
-          cmake -Wno-dev -DCMAKE_TOOLCHAIN_FILE=../cross/aarch64-linux-gnu.cmake -DCMAKE_INSTALL_PREFIX=aarch64-linux-gnu -DCMAKE_BUILD_TYPE=MinSizeRel ../
+          cmake -Wno-dev -DCMAKE_TOOLCHAIN_FILE=${host} -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
           cmake --build ./ -j 50
           cmake --install ./
           

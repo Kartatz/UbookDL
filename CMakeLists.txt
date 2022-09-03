@@ -363,7 +363,6 @@ target_link_libraries(
 	ubookdl
 	cjson
 	libcurl
-	bearssl
 )
 
 install(TARGETS cjson
@@ -376,10 +375,4 @@ install(TARGETS libcurl
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib/libcurl
-)
-
-install(TARGETS bearssl
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/bearssl
 )
