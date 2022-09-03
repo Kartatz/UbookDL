@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "types.h"
-#include "io.h"
+#include "utils.h"
 
 size_t curl_write_buffer_cb(char *chunk, size_t size, size_t nmemb, struct String* string) {
 	
