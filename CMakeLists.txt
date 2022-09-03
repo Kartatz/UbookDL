@@ -49,6 +49,7 @@ include_directories(
 	src
 	submodules/bearssl/src
 	submodules/bearssl/inc
+	submodules/cJSON
 )
 
 add_library(
@@ -350,7 +351,7 @@ add_library(
 	submodules/bearssl/src/x509/x509_minimal_full.c
 )
 
-add_subdirectory(submodules/json-c EXCLUDE_FROM_ALL)
+add_subdirectory(submodules/cJSON EXCLUDE_FROM_ALL)
 add_subdirectory(submodules/curl EXCLUDE_FROM_ALL)
 
 add_executable(
@@ -365,15 +366,15 @@ add_executable(
 
 target_link_libraries(
 	ubookdl
-	json-c
+	cjson
 	libcurl
 	bearssl
 )
 
-install(TARGETS json-c
+install(TARGETS cjson
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/json-c
+	ARCHIVE DESTINATION lib/cjson
 )
 
 install(TARGETS libcurl

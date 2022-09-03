@@ -7,3 +7,6 @@
 [submodule "submodules/bearssl"]
 	path = submodules/bearssl
 	url = https://www.bearssl.org/git/BearSSL
+[submodule "submodules/cJSON"]
+	path = submodules/cJSON
+	url = https://github.com/DaveGamble/cJSON

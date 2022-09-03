@@ -3,8 +3,7 @@
 #include <string.h>
 
 #include <curl/curl.h>
-#include <json.h>
-#include <json_util.h>
+#include <cJSON.h>
 
 #include "query.h"
 #include "errors.h"
@@ -89,7 +88,7 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		(void) fgets(access_token, sizeof(access_token), file);
+		fgets(access_token, sizeof(access_token), file);
 		
 		fclose(file);
 	} else {
@@ -142,10 +141,9 @@ int main(const int argc, const char* argv[]) {
 		write_stderr("ubookdl: erro: não foi possível alocar memória\r\n");
 		return EXIT_FAILURE;
 	}
-	puts(url);
+	
 	if (curl_url_set(uri, CURLUPART_URL, url, 0) != CURLE_OK) {
 		write_stderr("ubookdl: erro: url inválida ou não reconhecida\r\n");
-		puts("a");
 		return EXIT_FAILURE;
 	}
 	
@@ -153,12 +151,10 @@ int main(const int argc, const char* argv[]) {
 	
 	if (curl_url_get(uri, CURLUPART_PATH, &path, 0) != CURLE_OK) {
 		write_stderr("ubookdl: erro: url inválida ou; não reconhecida\r\n");
-		puts("b");
 		return EXIT_FAILURE;
 	}
 	
 	if (strlen(path) < 2) {
-		puts("c");
 		write_stderr("ubookdl: erro: url inválida ou não reconhecida\r\n");
 		return EXIT_FAILURE;
 	}
@@ -226,8 +222,7 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		struct json_object* tree = json_tokener_parse(string.s);
-		
+		const cJSON* tree = cJSON_Parse(string.s);
 		string_free(&string);
 		
 		if (tree == NULL) {
@@ -235,19 +230,19 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		json_object* obj = json_object_object_get(tree, "success");
+		const cJSON* obj = cJSON_GetObjectItemCaseSensitive(tree, "success");
 		
-		if (!json_object_get_boolean(obj)) {
+		if (!cJSON_IsBool(obj) || cJSON_IsFalse(obj)) {
 			write_stderr("ubookdl: erro: não foi possível realizar login\r\n");
 			return EXIT_FAILURE;
 		}
 		
-		printf("login realizado com sucesso!\r\n");
+		printf("Login realizado com sucesso!\r\n");
 		
-		json_object* info = json_object_object_get(tree, "data");
-		json_object* token = json_object_object_get(info, "token");
+		const cJSON* info = cJSON_GetObjectItemCaseSensitive(tree, "data");
+		const cJSON* token = cJSON_GetObjectItemCaseSensitive(info, "token");
 		
-		strcpy(access_token, json_object_get_string(token));
+		strcpy(access_token, token->valuestring);
 		
 		FILE* file = fopen(TOKEN_FILENAME, "w");
 		
@@ -286,7 +281,7 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		struct json_object* tree = json_tokener_parse(string.s);
+		const cJSON* tree = cJSON_Parse(string.s);
 		
 		string_free(&string);
 		
@@ -295,13 +290,9 @@ int main(const int argc, const char* argv[]) {
 			return EXIT_FAILURE;
 		}
 		
-		json_object* obj = json_object_object_get(tree, "success");
+		const cJSON* obj = cJSON_GetObjectItemCaseSensitive(tree, "success");
 		
-		const int success = obj != NULL && json_object_get_boolean(obj);
-		
-		json_object_put(tree);
-		
-		if (!success) {
+		if (!cJSON_IsBool(obj) || cJSON_IsFalse(obj)) {
 			remove_file(TOKEN_FILENAME);
 			
 			write_stderr("ubookdl: erro: chave de acesso inválida ou expirada, realize o login novamente\r\n");
@@ -336,7 +327,7 @@ int main(const int argc, const char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	struct json_object* tree = json_tokener_parse(string.s);
+	const cJSON* tree = cJSON_Parse(string.s);
 	
 	string_free(&string);
 	
@@ -345,23 +336,23 @@ int main(const int argc, const char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	json_object* obj = json_object_object_get(tree, "success");
+	const cJSON* obj = cJSON_GetObjectItemCaseSensitive(tree, "success");
 	
-	if (!json_object_get_boolean(obj)) {
+	if (!cJSON_IsBool(obj) || cJSON_IsFalse(obj)) {
 		write_stderr("ubookdl: erro: não foi possível obter informações sobre o livro\r\n");
 		return EXIT_FAILURE;
 	}
+	puts("a");
+	const cJSON* info = cJSON_GetObjectItemCaseSensitive(tree, "data");
+	const cJSON* product = cJSON_GetObjectItemCaseSensitive(info, "product");
 	
-	json_object* info = json_object_object_get(tree, "data");
-	json_object* product = json_object_object_get(info, "product");
-	
-	const char* title = json_object_get_string(json_object_object_get(product, "title"));
-	const char* engine = json_object_get_string(json_object_object_get(product, "engine"));
-	
+	const char* title = cJSON_GetObjectItemCaseSensitive(product, "title")->valuestring;
+	const char* engine = cJSON_GetObjectItemCaseSensitive(product, "engine")->valuestring;
+	puts("b");
 	const char* endpoint = NULL;
 	const char* document_file = NULL;
 	
-	char filename[strlen(title) + 4 + 1];
+	char filename[strlen(title) + 5 + 1];
 	strcpy(filename, title);
 	
 	char* ptr = strpbrk(filename, INVALID_FILENAME_CHARS);
@@ -370,6 +361,7 @@ int main(const int argc, const char* argv[]) {
 		*ptr = '_';
 		ptr = strpbrk(ptr, INVALID_FILENAME_CHARS);
 	}
+	puts(book_id);
 	
 	if (strcmp(engine, "ebook-epub") == 0) {
 		endpoint = "https://www.ubook.com/backend/getEpubFile";
@@ -392,8 +384,9 @@ int main(const int argc, const char* argv[]) {
 	}
 	
 	char* fullpath = NULL;
-	expand_filename(filename, &fullpath);
 	
+	expand_filename(filename, &fullpath);
+	puts(book_id);
 	add_parameter(&query, "id", book_id);
 	add_parameter(&query, "token", access_token);
 	
@@ -416,7 +409,8 @@ int main(const int argc, const char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	tree = json_tokener_parse(string.s);
+	puts(string.s);
+	tree = cJSON_Parse(string.s);
 	string_free(&string);
 	
 	if (tree == NULL) {
@@ -424,7 +418,7 @@ int main(const int argc, const char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	const char* download_url = json_object_get_string(json_object_object_get(json_object_object_get(tree, "data"), document_file));
+	const char* download_url = cJSON_GetObjectItemCaseSensitive(cJSON_GetObjectItemCaseSensitive(tree, "data"), document_file)->valuestring;
 	
 	curl_easy_setopt(curl, CURLOPT_URL, download_url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
@@ -446,7 +440,7 @@ int main(const int argc, const char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	
+	printf("Seu livro foi baixado! Pressione 'Enter' para finalizar. \r\n");
 	getchar();
 	
 	return EXIT_SUCCESS;
