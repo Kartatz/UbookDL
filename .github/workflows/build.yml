@@ -30,7 +30,7 @@ jobs:
         )
         
         for host in "${hosts[@]}"; do
-          cmake -Wno-dev -DCMAKE_TOOLCHAIN_FILE=${host} -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
+          cmake -Wno-dev -DCMAKE_TOOLCHAIN_FILE=${host}.cmake -DCMAKE_INSTALL_PREFIX=${host} -DCMAKE_BUILD_TYPE=MinSizeRel ../
           cmake --build ./ -j 50
           cmake --install ./
           
