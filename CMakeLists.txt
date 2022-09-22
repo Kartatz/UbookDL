@@ -370,14 +370,20 @@ target_link_libraries(
 	libcurl
 )
 
-install(TARGETS cjson
+install(
+	TARGETS ubookdl
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/cjson
 )
 
-install(TARGETS libcurl
+install(
+	TARGETS cjson
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib/libcurl
+)
+
+install(
+	TARGETS libcurl
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
 )

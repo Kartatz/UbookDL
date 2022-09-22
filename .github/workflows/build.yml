@@ -49,6 +49,7 @@ jobs:
             x86_64-w64-mingw32
         )
         
+        mkdir --parent ../tarballs
         mkdir build && cd build
         
         for target in "${targets[@]}"; do
@@ -61,7 +62,13 @@ jobs:
             
             cmake --build ./ -j 1 1>/dev/null
             
-            cmake --install ./
+            cmake --install ./ 1>/dev/null
+            
+            tar --create --file=- "${target}" |  xz --compress -9 > "../tarballs/${target}.tar.xz"
             
             rm --force --recursive ./*
         done
+    - name: Upload artifact
+      uses: actions/upload-artifact@main
+      with:
+        path: ./tarballs
