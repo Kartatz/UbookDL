@@ -35,6 +35,9 @@ jobs:
         echo "LLVM_MINGW_HOME=$(dirname "${LLVM_MINGW_TARBALL}")/$(basename "${LLVM_MINGW_URL}" '.tar.xz')" >> "${GITHUB_ENV}"
     - name: Build with CMake
       run: |
+        
+        declare -r MACHINE_HOST="$(gcc -dumpmachine)"
+        
         declare -r targets=(
             aarch64-linux-android
             aarch64-linux-gnu
@@ -47,9 +50,10 @@ jobs:
             i686-w64-mingw32
             x86_64-linux-android
             x86_64-w64-mingw32
+            "${MACHINE_HOST}"
         )
         
-        declare -r TARBALLS_DIRECTORY="$(realpath '../tarballs')"
+        declare -r TARBALLS_DIRECTORY="$(realpath './tarballs')"
         
         mkdir --parent "${TARBALLS_DIRECTORY}"
         mkdir build && cd build
@@ -57,10 +61,16 @@ jobs:
         for target in "${targets[@]}"; do
             echo "Building for ${target}"
             
-            cmake -Wno-dev \
-                -DCMAKE_TOOLCHAIN_FILE="./.github/workflows/cmake_toolchains/${target}.cmake" \
-                -DCMAKE_INSTALL_PREFIX="${target}" \
-                -DCMAKE_BUILD_TYPE=MinSizeRel ../ 1>/dev/null
+            if [ "${target}" == "${MACHINE_HOST}" ]; then
+                cmake -Wno-dev \
+                    -DCMAKE_INSTALL_PREFIX="${target}" \
+                    -DCMAKE_BUILD_TYPE=MinSizeRel ../ 1>/dev/null
+            else
+                cmake -Wno-dev \
+                    -DCMAKE_TOOLCHAIN_FILE="./.github/workflows/cmake_toolchains/${target}.cmake" \
+                    -DCMAKE_INSTALL_PREFIX="${target}" \
+                    -DCMAKE_BUILD_TYPE=MinSizeRel ../ 1>/dev/null
+            fi
             
             cmake --build ./ -j 1 1>/dev/null
             
