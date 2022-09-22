@@ -49,7 +49,9 @@ jobs:
             x86_64-w64-mingw32
         )
         
-        mkdir --parent ../tarballs
+        declare -r TARBALLS_DIRECTORY="$(realpath '../tarballs')"
+        
+        mkdir --parent "${TARBALLS_DIRECTORY}"
         mkdir build && cd build
         
         for target in "${targets[@]}"; do
@@ -64,7 +66,7 @@ jobs:
             
             cmake --install ./ 1>/dev/null
             
-            tar --create --file=- "${target}" |  xz --compress -9 > "../tarballs/${target}.tar.xz"
+            tar --create --file=- "${target}" |  xz --compress -9 > "${TARBALLS_DIRECTORY}/${target}.tar.xz"
             
             rm --force --recursive ./*
         done
